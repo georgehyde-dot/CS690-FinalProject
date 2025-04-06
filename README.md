@@ -1,1 +1,2 @@
-# CS690-FinalProject
+# CS690-FinalProject [![.NET](https://github.com/georgehyde-dot/CS690-FinalProject/actions/workflows/dotnet.yml/badge.svg?branch=main)](https://github.com/georgehyde-dot/CS690-FinalProject/actions/workflows/dotnet.yml)
+This is the final project for George Hyde in CS690. See [Wiki](https://github.com/georgehyde-dot/CS690-FinalProject/wiki) for details.
