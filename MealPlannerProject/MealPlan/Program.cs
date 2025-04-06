@@ -1,8 +1,10 @@
-﻿using System.Linq;
-using System.Net.Http.Headers;
-using System.Reflection.Metadata.Ecma335;
-using Spectre.Console;
+﻿using Spectre.Console;
 namespace MealPlan;
+using System;
+using System.Collections.Generic; 
+using System.IO;                
+using System.Linq;              
+using System.Text.Json;  
 
 
 class Program
@@ -394,16 +396,30 @@ class Program
 
     static void Main(string[] args)
     {
+        // Manage Data at start up
+        const string pantryFile = "pantry-data.json";
+        const string recipesFile = "recipes-data.json";
+        const string shoppingListFile = "shopping-list-data.json";
 
-        // Initialize Storage for a session
-        FileSaver recipeFileSaver = new FileSaver("recipe-data.txt");
-        FileSaver ingredientFileSaver = new FileSaver("pantry-data.txt");
-        FileSaver shoppingListFileSaver = new FileSaver("shopping-list-data.txt");
+        var pantryFileSaver = new FileSaver(pantryFile);
+        var recipeListFileSaver = new FileSaver(recipesFile);
+        var shoppingListFileSaver = new FileSaver(shoppingListFile);
 
-        // Initialize in memory storage
-        ShoppingList shoppingList = new ShoppingList();
-        Pantry pantry = new Pantry();
-        RecipeList recipeList = new RecipeList();
+        var pantry = new Pantry();
+        var recipeList = new RecipeList();
+        var shoppingList = new ShoppingList();
+
+        Console.WriteLine("Loading data from files...");
+        // LoadCollection returns a List<T>, assign it to the corresponding property
+        pantry.Ingredients = pantryFileSaver.LoadCollection<Ingredient>();
+        recipeList.Recipes = recipeListFileSaver.LoadCollection<Recipe>();
+        shoppingList.Ingredients = shoppingListFileSaver.LoadCollection<Ingredient>();
+
+        Console.WriteLine($" -> Loaded {pantry.Ingredients.Count} pantry items.");
+        Console.WriteLine($" -> Loaded {recipeList.Recipes.Count} recipes.");
+        Console.WriteLine($" -> Loaded {shoppingList.Ingredients.Count} shopping list items.");
+        Console.WriteLine("------------------------------------");
+
         string mode = "Main-Menu";
 
         while (mode != "Quit") {
@@ -429,14 +445,13 @@ class Program
                             .MoreChoicesText("[grey](Move up and down to see modes)[/]")
                             .AddChoices(new[] {
                                 "Add-Ingredient", "Add-Recipe", "Show-List", 
-                                "Remove-Ingredient", "Main-Menu",
+                                "Remove-Ingredient", "Save-List", "Main-Menu",
 
                     }));
                     switch (action)
                     {
                         case "Add-Ingredient":
                             Ingredient ingredient = shoppingList.AddIngredientToShoppingList();
-                            shoppingListFileSaver.AppendLine(ingredient.name + " " + ingredient.amount + " " + ingredient.measurementType);
                             break;
                         case "Add-Recipe":
                             shoppingList.AddRecipeIngredientsToShoppingList(recipeList);
@@ -447,13 +462,15 @@ class Program
                         case "Remove-Ingredient":
                             shoppingList.RemoveIngredientsFromShoppingList();
                             break;
+                        case "Save-List":
+                            shoppingListFileSaver.SaveCollection(shoppingList.Ingredients);
+                            break;
                         case "Main-Menu":
                             mode = "Main-Menu";
                             break;
                     }
                 }
             } else if (mode=="Pantry") {
-                // TODO Ingredients entrypoint
                 // add, modify, remove, list, select mode
                 while (mode != "Main-Menu") {
                     string action = AnsiConsole.Prompt(
@@ -463,7 +480,7 @@ class Program
                         .MoreChoicesText("[grey](Move up and down to see modes)[/]")
                         .AddChoices(new[] {
                             "Add-Ingredient", "Show-Ingredients", 
-                            "Remove-Ingredient", "Main-Menu",
+                            "Remove-Ingredient", "Save-Pantry", "Main-Menu",
 
                     }));
                     switch (action)
@@ -477,6 +494,9 @@ class Program
                         case "Remove-Ingredient":
                             pantry.RemoveIngredientsFromPantry();
                             break;
+                        case "Save-Pantry":
+                            pantryFileSaver.SaveCollection(pantry.Ingredients);
+                            break;
                         case "Main-Menu":
                             mode = "Main-Menu";
                             break;
@@ -484,7 +504,6 @@ class Program
                 }
                 
             } else if (mode=="Recipes") {
-                // TODO Recipes entrypoint
                 // create, modify, remove, list, select mode
                 while (mode != "Main-Menu") {
                     string action = AnsiConsole.Prompt(
@@ -494,7 +513,7 @@ class Program
                         .MoreChoicesText("[grey](Move up and down to see modes)[/]")
                         .AddChoices(new[] {
                             "Create-Recipe", "Remove-Recipe", "List-Recipes",
-                            "Update-Recipe", "Main-Menu",
+                            "Update-Recipe", "Save-Recipes", "Main-Menu",
 
                     }));
                     switch (action)
@@ -512,6 +531,9 @@ class Program
                         case "Update-Recipe":
                             recipeList.UpdateRecipe(pantry);
                             break;
+                        case "Save-Recipes":
+                            recipeListFileSaver.SaveCollection(recipeList.Recipes);
+                            break;
                         case "Main-Menu":
                             mode = "Main-Menu";
                             break;
@@ -522,19 +544,90 @@ class Program
         Console.WriteLine("Thanks for visiting!");
     } 
 
-    public class FileSaver {
-        string filename;
+    public class FileSaver
+    {
+        private readonly string _filename;
 
-        public FileSaver(string filename) {
-            this.filename = filename;
-            File.Create(this.filename).Close();
+        private static readonly JsonSerializerOptions _options = new JsonSerializerOptions
+        {
+            WriteIndented = true,
+        };
+
+        public FileSaver(string filename)
+        {
+            if (string.IsNullOrWhiteSpace(filename))
+            {
+                throw new ArgumentException("Filename cannot be null or whitespace.", nameof(filename));
+            }
+            this._filename = filename;
+
+            try
+            {
+                string directory = Path.GetDirectoryName(this._filename);
+                if (!string.IsNullOrEmpty(directory) && !Directory.Exists(directory))
+                {
+                    Directory.CreateDirectory(directory);
+                }
+
+                if (!File.Exists(this._filename))
+                {
+                    File.WriteAllText(this._filename, "[]");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[Error] Failed to initialize file '{this._filename}': {ex.Message}");
+            }
         }
 
-        public void AppendLine(string line) {            
-            File.AppendAllText(this.filename, line + Environment.NewLine);
+        public void SaveCollection<T>(IEnumerable<T> collection)
+        {
+            if (collection == null)
+            {
+                collection = Enumerable.Empty<T>();
+            }
+
+            try
+            {
+                string jsonString = JsonSerializer.Serialize(collection, _options);
+                File.WriteAllText(_filename, jsonString);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[Error] Failed to save data to '{_filename}': {ex.Message}");
+            }
         }
+        public List<T> LoadCollection<T>()
+        {
+            try
+            {
+                if (!File.Exists(_filename))
+                {
+                    Console.WriteLine($"[Warning] File not found: '{_filename}'. Returning empty list.");
+                    return new List<T>();
+                }
 
+                string jsonString = File.ReadAllText(_filename);
 
+                if (string.IsNullOrWhiteSpace(jsonString))
+                {
+                    return new List<T>(); 
+                }
+
+                List<T> loadedData = JsonSerializer.Deserialize<List<T>>(jsonString, _options);
+                return loadedData ?? new List<T>(); 
+            }
+            catch (JsonException jsonEx)
+            {
+                Console.WriteLine($"[Error] Invalid JSON format in '{_filename}': {jsonEx.Message}. Returning empty list.");
+                return new List<T>();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[Error] Failed to load data from '{_filename}': {ex.Message}. Returning empty list.");
+                return new List<T>();
+            }
+        }
     }
 
     
