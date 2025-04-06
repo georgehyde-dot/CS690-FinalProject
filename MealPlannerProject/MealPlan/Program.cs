@@ -10,10 +10,68 @@ class Program
         public string name;
         public int amount;
         public string measmentType;
+
+        public Ingredient(){
+            Console.WriteLine("Enter Ingredient Name");
+            string name = Console.ReadLine();
+            Console.WriteLine("Enter Unit of Measure");
+            string measmentType = Console.ReadLine();
+            bool success = false;
+            int finalNumAmount;
+            while(true)
+            {
+                Console.WriteLine("Enter Ingredient Quantity");
+                string amount = Console.ReadLine();
+                success = int.TryParse(amount, out int numAmount);
+                if (success)
+                {
+                    finalNumAmount = numAmount;
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Invalid input. That was not a valid whole number. Try Again");
+                }
+            }
+
+            this.name = name;
+            this.measmentType = measmentType;
+            this.amount = finalNumAmount;
+        }
     }
 
     public struct Pantry {
         List<Ingredient> Ingredients;
+
+        public void ShowIngredientsInPantry() {
+            foreach (Ingredient ingredient in Ingredients) {
+                AnsiConsole.WriteLine(ingredient.name + " " + ingredient.amount + " " + ingredient.measmentType);
+            }
+        }
+
+        public Ingredient AddIngredientToPantry() {
+            Ingredient ingredient = new Ingredient();
+            this.Ingredients.Append(ingredient);
+            return ingredient; 
+        }
+
+        public void RemoveIngredientsFromPantry() {
+            var removeIngredients = AnsiConsole.Prompt(
+                new MultiSelectionPrompt<Ingredient>()
+                    .Title("Select [green]ingredients to remove[/]?")
+                    .NotRequired() 
+                    .PageSize(10)
+                    .MoreChoicesText("[grey](Move up and down to reveal more ingredients)[/]")
+                    .InstructionsText(
+                        "[grey](Press [blue]<space>[/] to toggle an ingredient, " + 
+                        "[green]<enter>[/] to accept)[/]")
+                    .AddChoices(this.Ingredients.Select(ingredient => ingredient)));
+                            
+
+            foreach(Ingredient ingredient in removeIngredients) {
+                this.Ingredients.Remove(ingredient);
+            }
+        }
     }
 
     public struct Recipe {
@@ -33,8 +91,10 @@ class Program
     public struct ShoppingList {
         public List<Ingredient> Ingredients;
 
-        public void AddIngredientToShoppingList(Ingredient ingredient) {
+        public Ingredient AddIngredientToShoppingList() {
+            Ingredient ingredient = new Ingredient();
             this.Ingredients.Append(ingredient);
+            return ingredient;
         }
 
         public void AddRecipeIngredientsToShoppingList(Recipe recipe) {
@@ -48,6 +108,34 @@ class Program
                 AnsiConsole.WriteLine(ingredient.name + " " + ingredient.amount + " " + ingredient.measmentType);
             }
         }
+
+        public void RemoveIngredientsFromShoppingList() {
+            var removeIngredients = AnsiConsole.Prompt(
+                new MultiSelectionPrompt<Ingredient>()
+                    .Title("Select [green]ingredients to remove[/]?")
+                    .NotRequired() 
+                    .PageSize(10)
+                    .MoreChoicesText("[grey](Move up and down to reveal more ingredients)[/]")
+                    .InstructionsText(
+                        "[grey](Press [blue]<space>[/] to toggle an ingredient, " + 
+                        "[green]<enter>[/] to accept)[/]")
+                    .AddChoices(this.Ingredients.Select(ingredient => ingredient)));
+                            
+
+            foreach(Ingredient ingredient in removeIngredients) {
+                this.Ingredients.Remove(ingredient);
+            }
+        }
+
+        public void AddRecipeIngredientsToShoppingList(RecipeList recipeList) {
+            var selectedRecipeName = AnsiConsole.Prompt(
+                new SelectionPrompt<string>()
+                    .Title("Select a Recipe")       
+                    .PageSize(10)                  
+                    .MoreChoicesText("[grey](Move up and down to reveal more recipes)[/]") 
+                    .AddChoices(recipeList.Recipes.Select(recipe => recipe.Name))
+            );
+        }
     }
 
     static void Main(string[] args)
@@ -60,9 +148,9 @@ class Program
 
         // Initialize in memory storage
         ShoppingList shoppingList = new ShoppingList();
-        // Pantry pantry = new Pantry();
+        Pantry pantry = new Pantry();
         RecipeList recipeList = new RecipeList();
-        string mode = "start";
+        string mode = "Main-Menu";
 
         while (mode != "Quit") {
             Console.WriteLine("Please Select Mode (shopping-list, pantry, recipes), or (quit) to exit program");
@@ -85,61 +173,90 @@ class Program
                         .MoreChoicesText("[grey](Move up and down to see modes)[/]")
                         .AddChoices(new[] {
                             "Add-Ingredient", "Add-Recipe", "Show-List", 
-                            "Remove-Ingredient", "Main Menu",
+                            "Remove-Ingredient", "Main-Menu",
 
                  }));
-                switch (action)
-                {
-                    case "Add-Ingrdient":
-                        Console.WriteLine("Enter Ingredient Name");
-                        string name = Console.ReadLine();
-                        Console.WriteLine("Enter Unit of Measure");
-                        string measmentType = Console.ReadLine();
-                        Console.WriteLine("Enter Ingredient Quantity");
-                        string quantity = Console.ReadLine();
-                        shoppingListFileSaver.AppendLine(name + " " + quantity + measmentType);
-                        break;
-                    case "Add-Recipe":
-                         var selectedRecipeName = AnsiConsole.Prompt(
-                            new SelectionPrompt<string>()
-                                .Title("Select a Recipe")       
-                                .PageSize(10)                  
-                                .MoreChoicesText("[grey](Move up and down to reveal more recipes)[/]") 
-                                .AddChoices(recipeList.Recipes.Select(recipe => recipe.Name))
-                        );
-                        break;
-                    case "Show-List":
-                        shoppingList.ShowIngredientsInShoppingList();
-                        break;
-                    case "Remove-Ingredient":
-                        var removeIngredients = AnsiConsole.Prompt(
-                            new MultiSelectionPrompt<Ingredient>()
-                                .Title("Select [green]ingredients to remove[/]?")
-                                .NotRequired() 
-                                .PageSize(10)
-                                .MoreChoicesText("[grey](Move up and down to reveal more ingredients)[/]")
-                                .InstructionsText(
-                                    "[grey](Press [blue]<space>[/] to toggle an ingredient, " + 
-                                    "[green]<enter>[/] to accept)[/]")
-                                .AddChoices(shoppingList.Ingredients.Select(ingredient => ingredient)));
-                        
-
-                        foreach(Ingredient ingredient in removeIngredients) {
-                            removeIngredients.Remove(ingredient);
-                        }
-                        break;
-              }
-
-
+                while(mode != "Main-Menu") {
+                    switch (action)
+                    {
+                        case "Add-Ingredient":
+                            Ingredient ingredient = shoppingList.AddIngredientToShoppingList();
+                            shoppingListFileSaver.AppendLine(ingredient.name + " " + ingredient.amount + " " + ingredient.measmentType);
+                            break;
+                        case "Add-Recipe":
+                            shoppingList.AddRecipeIngredientsToShoppingList(recipeList);
+                            break;
+                        case "Show-List":
+                            shoppingList.ShowIngredientsInShoppingList();
+                            break;
+                        case "Remove-Ingredient":
+                            shoppingList.RemoveIngredientsFromShoppingList();
+                            break;
+                        case "Main-Menu":
+                            mode = "Main-Menu";
+                            break;
+                    }
+                }
             } else if (mode=="Pantry") {
                 // TODO Ingredients entrypoint
                 // add, modify, remove, list, select mode
+                while (mode != "Main-Menu") {
+                    string action = AnsiConsole.Prompt(
+                    new SelectionPrompt<string>()
+                        .Title("Select action")
+                        .PageSize(10)
+                        .MoreChoicesText("[grey](Move up and down to see modes)[/]")
+                        .AddChoices(new[] {
+                            "Add-Ingredient", "Show-Ingredients", 
+                            "Remove-Ingredient", "Main-Menu",
+
+                    }));
+                    switch (action)
+                    {
+                        case "Add-Ingredient":
+                            pantry.AddIngredientToPantry();
+                            break;
+                        case "Show-Ingredients":
+                            pantry.ShowIngredientsInPantry();
+                            break;
+                        case "Remove-Ingredients":
+                            pantry.RemoveIngredientsFromPantry();
+                            break;
+                        case "Main-Menu":
+                            mode = "Main-Menu";
+                            break;
+                    }
+                }
+                
             } else if (mode=="Recipes") {
                 // TODO Recipes entrypoint
                 // create, modify, remove, list, select mode
-            } else {
-                Console.WriteLine("Mode must be from list (shopping-list, pantry, recipes), or (quit) to exit program");
-                continue;
+                while (mode != "Main-Menu") {
+                    string action = AnsiConsole.Prompt(
+                    new SelectionPrompt<string>()
+                        .Title("Select action")
+                        .PageSize(10)
+                        .MoreChoicesText("[grey](Move up and down to see modes)[/]")
+                        .AddChoices(new[] {
+                            "Create-Recipe", "Remove-Recipe", "List-Recipes",
+                            "Update-Recipe", "Main-Menu",
+
+                    }));
+                    switch (action)
+                    {
+                        case "Create-Recipe":
+                            break;
+                        case "Remove-Recipe":
+                            break;
+                        case "List-Recipess":
+                            break;
+                        case "Update-Recipe":
+                            break;
+                        case "Main-Menu":
+                            mode = "Main-Menu";
+                            break;
+                    }
+                }
             }
         }
         Console.WriteLine("Thanks for visiting!");
