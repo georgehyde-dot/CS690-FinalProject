@@ -78,14 +78,48 @@ class Program
                 this.Ingredients.Remove(ingredient);
             }
         }
+
+        public List<Ingredient> SelectIngredientsFromPantry() {
+            var listIngredients = AnsiConsole.Prompt(
+                new MultiSelectionPrompt<Ingredient>()
+                    .Title("Select [green]ingredients [/]?")
+                    .NotRequired() 
+                    .PageSize(10)
+                    .MoreChoicesText("[grey](Move up and down to reveal more ingredients)[/]")
+                    .InstructionsText(
+                        "[grey](Press [blue]<space>[/] to toggle an ingredient, " + 
+                        "[green]<enter>[/] to accept)[/]")
+                    .AddChoices(this.Ingredients.Select(ingredient => ingredient)));
+            return listIngredients;
+        }
     }
 
     public struct Recipe {
         public string Name;
         public List<Ingredient> Ingredients;
 
-        public Recipe() {
+        public Recipe(Pantry pantry) {
+            Console.WriteLine("Enter Recipe Name");
+            string name = Console.ReadLine();
+            this.Name = name;
 
+            Console.WriteLine("Select Ingredients from pantry to add");
+
+            List<Ingredient> listIngredients = pantry.SelectIngredientsFromPantry();
+
+            Console.WriteLine("Enter new ingredients to add to recipe");
+            Console.WriteLine("Type (add) to add another ingredient, or (quit) to finish recipe");
+            string state = Console.ReadLine();
+
+            while(state!="quit") {
+                Ingredient ingredient = new Ingredient();
+                listIngredients.Append(ingredient);
+                
+                Console.WriteLine("Type (add) to add another ingredient, or (quit) to finish recipe");
+                state = Console.ReadLine();
+            }
+
+            this.Ingredients = listIngredients;
         }
     }
 
@@ -97,6 +131,54 @@ class Program
         public void AddRecipeToRecipeList(Recipe recipe) {
             this.Recipes.Append(recipe);
         }
+
+        public void ShowRecipesInRecipeList() {
+            if (this.Recipes.Count == 0) {
+                Console.WriteLine("RecipeList contains no recipes");
+                return;
+            }
+            foreach (Recipe recipe in this.Recipes) {
+                AnsiConsole.WriteLine(recipe.Name);
+            } 
+        }
+
+        public void RemoveRecipeFromRecipeList() {
+            if (this.Recipes.Count == 0) {
+                Console.WriteLine("RecipeList contains no Recipes");
+                return;
+            }
+            var removeRecipes = AnsiConsole.Prompt(
+                new MultiSelectionPrompt<Recipe>()
+                    .Title("Select [green]recipes to remove[/]?")
+                    .NotRequired() 
+                    .PageSize(10)
+                    .MoreChoicesText("[grey](Move up and down to reveal more ingredients)[/]")
+                    .InstructionsText(
+                        "[grey](Press [blue]<space>[/] to toggle a recipe, " + 
+                        "[green]<enter>[/] to accept)[/]")
+                    .AddChoices(this.Recipes.Select(recipe => recipe)));
+                            
+
+            foreach(Recipe recipe in removeRecipes) {
+                this.Recipes.Remove(recipe);
+            }
+        }
+
+    public void UpdateRecipe() {
+        var selectedRecipe = AnsiConsole.Prompt(
+                new SelectionPrompt<Recipe>()
+                    .Title("Select a Recipe")       
+                    .PageSize(10)                  
+                    .MoreChoicesText("[grey](Move up and down to reveal more recipes)[/]") 
+                    .AddChoices(this.Recipes.Select(recipe => recipe))
+            ); 
+
+        this.Recipes.Remove(selectedRecipe);
+
+        Recipe recipe = new Recipe();
+
+        this.AddRecipeToRecipeList(recipe);
+    }
 
     }
 
@@ -277,10 +359,13 @@ class Program
                             recipeList.AddRecipeToRecipeList(recipe);
                             break;
                         case "Remove-Recipe":
+                            recipeList.RemoveRecipeFromRecipeList();
                             break;
                         case "List-Recipes":
+                            recipeList.ShowRecipesInRecipeList();
                             break;
                         case "Update-Recipe":
+                            recipeList.UpdateRecipe();
                             break;
                         case "Main-Menu":
                             mode = "Main-Menu";
