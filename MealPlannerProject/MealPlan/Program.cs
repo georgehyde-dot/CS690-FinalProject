@@ -1,4 +1,6 @@
 ﻿using System.Linq;
+using System.Net.Http.Headers;
+using System.Reflection.Metadata.Ecma335;
 using Spectre.Console;
 namespace MealPlan;
 
@@ -44,6 +46,10 @@ class Program
         List<Ingredient> Ingredients;
 
         public void ShowIngredientsInPantry() {
+            if (this.Ingredients.Count == 0) {
+                Console.WriteLine("Pantry contains no ingredients");
+                return;
+            }
             foreach (Ingredient ingredient in Ingredients) {
                 AnsiConsole.WriteLine(ingredient.name + " " + ingredient.amount + " " + ingredient.measmentType);
             }
@@ -78,14 +84,20 @@ class Program
         public string Name;
         public List<Ingredient> Ingredients;
 
+        public Recipe() {
+
+        }
     }
 
     public struct RecipeList {
+        // "Create-Recipe", "Remove-Recipe", "List-Recipes",
+                            // "Update-Recipe",
         public List<Recipe> Recipes { get; set; }
 
         public void AddRecipeToRecipeList(Recipe recipe) {
             this.Recipes.Append(recipe);
         }
+
     }
 
     public struct ShoppingList {
@@ -98,18 +110,30 @@ class Program
         }
 
         public void AddRecipeIngredientsToShoppingList(Recipe recipe) {
+            if (recipe.Ingredients.Count == 0) {
+                Console.WriteLine("Recipe " + recipe.Name + "contains no ingredients");
+                return;
+            }
             foreach (Ingredient ingredient in recipe.Ingredients) {
                 Ingredients.Append(ingredient);
             }
         }
 
         public void ShowIngredientsInShoppingList() {
+            if (this.Ingredients.Count == 0) {
+                Console.WriteLine("ShoppingList contains no ingredients");
+                return;
+            }
             foreach (Ingredient ingredient in Ingredients) {
                 AnsiConsole.WriteLine(ingredient.name + " " + ingredient.amount + " " + ingredient.measmentType);
             }
         }
 
         public void RemoveIngredientsFromShoppingList() {
+            if (this.Ingredients.Count == 0) {
+                Console.WriteLine("ShoppingList contains no ingredients");
+                return;
+            }
             var removeIngredients = AnsiConsole.Prompt(
                 new MultiSelectionPrompt<Ingredient>()
                     .Title("Select [green]ingredients to remove[/]?")
@@ -128,6 +152,10 @@ class Program
         }
 
         public void AddRecipeIngredientsToShoppingList(RecipeList recipeList) {
+            if (recipeList.Recipes.Count == 0) {
+                Console.WriteLine("RecipeList contains no Recipes");
+                return;
+            }
             var selectedRecipeName = AnsiConsole.Prompt(
                 new SelectionPrompt<string>()
                     .Title("Select a Recipe")       
@@ -245,10 +273,12 @@ class Program
                     switch (action)
                     {
                         case "Create-Recipe":
+                            Recipe recipe = new Recipe();
+                            recipeList.AddRecipeToRecipeList(recipe);
                             break;
                         case "Remove-Recipe":
                             break;
-                        case "List-Recipess":
+                        case "List-Recipes":
                             break;
                         case "Update-Recipe":
                             break;
