@@ -9,46 +9,51 @@ using System.Text.Json;
 
 class Program
 {
+    public static Ingredient CreateInteractiveIngredient()
+    {
+        Console.WriteLine("Enter Ingredient Name");
+        string name = Console.ReadLine();
+
+        Console.WriteLine("Enter Unit of Measure");
+        string measurementType = Console.ReadLine();
+
+        int finalNumAmount;
+        while (true)
+        {
+            Console.WriteLine("Enter Ingredient Quantity");
+            string amountStr = Console.ReadLine();
+            if (int.TryParse(amountStr, out int numAmount) && numAmount >= 0)
+            {
+                finalNumAmount = numAmount;
+                break;
+            }
+            else
+            {
+                Console.WriteLine("Invalid input. Please enter a valid non-negative whole number. Try Again");
+            }
+        }
+        Ingredient newIngredient = new Ingredient {
+            name = name,
+            measurementType = measurementType,
+            amount = finalNumAmount
+        };
+        return newIngredient;
+    }
 
     public class Ingredient {
-        public string name;
-        public int amount;
-        public string measurementType;
+        public string name { get; set; }
+        public int amount { get; set; }
+        public string measurementType { get; set; }
 
-        public Ingredient(){
-            Console.WriteLine("Enter Ingredient Name");
-            string name = Console.ReadLine();
-            Console.WriteLine("Enter Unit of Measure");
-            string measurementType = Console.ReadLine();
-            bool success = false;
-            int finalNumAmount;
-            while(true)
-            {
-                Console.WriteLine("Enter Ingredient Quantity");
-                string amount = Console.ReadLine();
-                success = int.TryParse(amount, out int numAmount);
-                if (success)
-                {
-                    finalNumAmount = numAmount;
-                    break;
-                }
-                else
-                {
-                    Console.WriteLine("Invalid input. That was not a valid whole number. Try Again");
-                }
-            }
-
-            Console.WriteLine("Name " + name);
-            Console.WriteLine("MT " + measurementType);
-
-            this.name = name;
-            this.measurementType = measurementType;
-            this.amount = finalNumAmount;
+        public Ingredient() {
+            name = string.Empty;
+            measurementType = string.Empty;
+            amount = 0;
         }
     }
 
     public class Pantry {
-        public List<Ingredient> Ingredients;
+        public List<Ingredient> Ingredients { get; set; }
 
         public Pantry() {
             List<Ingredient> ingredients = new List<Ingredient>();
@@ -66,7 +71,7 @@ class Program
         }
 
         public Ingredient AddIngredientToPantry() {
-            Ingredient ingredient = new Ingredient();
+            Ingredient ingredient = CreateInteractiveIngredient();
             this.Ingredients.Add(ingredient);
             return ingredient; 
         }
@@ -144,8 +149,8 @@ class Program
     }
 
     public class Recipe {
-        public string Name;
-        public List<Ingredient> Ingredients;
+        public string Name { get; set; }
+        public List<Ingredient> Ingredients { get; set; }
 
         public Recipe(Pantry pantry) {
             Console.WriteLine("Enter Recipe Name");
@@ -167,7 +172,7 @@ class Program
             string state = Console.ReadLine();
 
             while(state!="quit") {
-                Ingredient ingredient = new Ingredient();
+                Ingredient ingredient = CreateInteractiveIngredient();
                 listIngredients.Add(ingredient);
                 
                 Console.WriteLine("Type (add) to add another ingredient, or (quit) to finish recipe");
@@ -179,7 +184,7 @@ class Program
     }
 
     public class RecipeList {
-        public List<Recipe> Recipes;
+        public List<Recipe> Recipes { get; set; }
 
         public RecipeList() {
             List<Recipe> recipes = new List<Recipe>();
@@ -296,7 +301,7 @@ class Program
     }
 
     public class ShoppingList {
-        public List<Ingredient> Ingredients;
+        public List<Ingredient> Ingredients { get; set; }
 
         public ShoppingList() {
             List<Ingredient> ingredients = new List<Ingredient>();
@@ -304,7 +309,7 @@ class Program
         }
 
         public Ingredient AddIngredientToShoppingList() {
-            Ingredient ingredient = new Ingredient();
+            Ingredient ingredient = CreateInteractiveIngredient();
             this.Ingredients.Add(ingredient);
             return ingredient;
         }

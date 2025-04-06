@@ -1,3 +1,22 @@
 [
-  {}
+  {
+    "Name": "r1",
+    "Ingredients": [
+      {
+        "name": "a",
+        "amount": 1,
+        "measurementType": "a"
+      },
+      {
+        "name": "b",
+        "amount": 2,
+        "measurementType": "b"
+      },
+      {
+        "name": "c",
+        "amount": 3,
+        "measurementType": "c"
+      }
+    ]
+  }
 ]
