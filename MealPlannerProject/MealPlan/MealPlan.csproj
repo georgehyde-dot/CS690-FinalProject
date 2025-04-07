@@ -12,4 +12,13 @@
     <PackageReference Include="Spectre.Console.Cli" Version="0.49.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\FileSaver\FileSaver.csproj" />
+    <ProjectReference Include="..\Ingredient\Ingredient.csproj" />
+    <ProjectReference Include="..\PantryClass\PantryClass.csproj" />
+    <ProjectReference Include="..\RecipeClass\RecipeClass.csproj" />
+    <ProjectReference Include="..\RecipeListClass\RecipeListClass.csproj" />
+    <ProjectReference Include="..\ShoppingListClass\ShoppingListClass.csproj" />
+  </ItemGroup>
+
 </Project>
