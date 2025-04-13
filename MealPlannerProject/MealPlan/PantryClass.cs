@@ -1,5 +1,4 @@
-﻿namespace PantryClass;
-using Ingredient;
+﻿namespace MealPlan;
 using Spectre.Console;
 
 

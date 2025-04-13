@@ -1,4 +1,4 @@
-﻿namespace FileSaver;
+﻿namespace MealPlan;
 using System.IO;                
 using System.Linq;              
 using System.Text.Json; 

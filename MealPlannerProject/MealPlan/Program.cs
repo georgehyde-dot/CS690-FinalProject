@@ -3,11 +3,6 @@ namespace MealPlan;
 using System;
 using System.Collections.Generic; 
 using System.Linq;              
-using FileSaver;
-using Ingredient;
-using RecipeListClass;
-using ShoppingListClass; 
-
 
 class Program
 {
@@ -22,14 +17,14 @@ class Program
         var recipeListFileSaver = new FileSaver(recipesFile);
         var shoppingListFileSaver = new FileSaver(shoppingListFile);
 
-        var pantry = new PantryClass.Pantry();
+        var pantry = new Pantry();
         var recipeList = new RecipeList();
         var shoppingList = new ShoppingList();
 
         Console.WriteLine("Loading data from files...");
         // LoadCollection returns a List<T>, assign it to the corresponding property
         pantry.Ingredients = pantryFileSaver.LoadCollection<Ingredient>();
-        recipeList.Recipes = recipeListFileSaver.LoadCollection<RecipeClass.Recipe>();
+        recipeList.Recipes = recipeListFileSaver.LoadCollection<Recipe>();
         shoppingList.Ingredients = shoppingListFileSaver.LoadCollection<Ingredient>();
 
         Console.WriteLine($" -> Loaded {pantry.Ingredients.Count} pantry items.");
@@ -136,7 +131,7 @@ class Program
                     switch (action)
                     {
                         case "Create-Recipe":
-                            RecipeClass.Recipe recipe = new RecipeClass.Recipe(pantry);
+                            Recipe recipe = new Recipe(pantry);
                             recipeList.AddRecipeToRecipeList(recipe);
                             break;
                         case "Remove-Recipe":

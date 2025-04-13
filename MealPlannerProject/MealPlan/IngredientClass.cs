@@ -1,5 +1,4 @@
-﻿namespace Ingredient;
-
+﻿namespace MealPlan;
     public class Ingredient {
         public string name { get; set; }
         public int amount { get; set; }

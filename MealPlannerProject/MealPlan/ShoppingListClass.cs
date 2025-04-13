@@ -1,7 +1,5 @@
-﻿namespace ShoppingListClass;
-using Ingredient;
+﻿namespace MealPlan;
 using Spectre.Console;
-using RecipeListClass;
 
 public class ShoppingList {
         public List<Ingredient> Ingredients { get; set; }
@@ -67,7 +65,7 @@ public class ShoppingList {
             }
         }
 
-        public void AddRecipeIngredientsToShoppingList(RecipeListClass.RecipeList recipeList)
+        public void AddRecipeIngredientsToShoppingList(RecipeList recipeList)
         {
             if (recipeList == null || recipeList.Recipes == null || recipeList.Recipes.Count == 0)
             {
@@ -83,7 +81,7 @@ public class ShoppingList {
                     .AddChoices(recipeList.Recipes.Select(recipe => recipe.Name ?? "Unnamed Recipe"))
             );
 
-            RecipeClass.Recipe foundRecipe = recipeList.Recipes.FirstOrDefault(recipe => recipe.Name == selectedRecipeName);
+            Recipe foundRecipe = recipeList.Recipes.FirstOrDefault(recipe => recipe.Name == selectedRecipeName);
 
             if (foundRecipe != null) 
             {

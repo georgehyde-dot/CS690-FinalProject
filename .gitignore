@@ -482,3 +482,8 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
+
+# json file stores
+pantry-data.json
+recipes-data.json
+shopping-list-data.json

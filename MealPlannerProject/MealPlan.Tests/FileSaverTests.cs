@@ -1,10 +1,12 @@
 namespace MealPlan.Tests;
 using MealPlan;
-public class MealPlanTests
+public class FileSaverTests
 {
+    
+
     [Fact]
     public void Test1()
     {
-
+        
     }
 }
