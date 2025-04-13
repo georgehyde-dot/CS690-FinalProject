@@ -5,18 +5,6 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MealPlan", "MealPlan\MealPlan.csproj", "{FFCC773D-143E-4E24-A852-8200AF879E4E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileSaver", "FileSaver\FileSaver.csproj", "{DCC17D13-F71E-42CA-9902-CED2FFD321A3}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ingredient", "Ingredient\Ingredient.csproj", "{CC7D48E7-E75B-41CC-B61A-97D2C0CC2031}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PantryClass", "PantryClass\PantryClass.csproj", "{A7B822DC-071B-4B25-AA14-BEB2208F9AFC}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RecipeClass", "RecipeClass\RecipeClass.csproj", "{D7AC2FE2-3BA1-42A7-9178-7FC7E6FF1701}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RecipeListClass", "RecipeListClass\RecipeListClass.csproj", "{C76ACCFF-2421-40C1-BAFC-DAF690DC92E4}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShoppingListClass", "ShoppingListClass\ShoppingListClass.csproj", "{E2CD5A59-F69C-412A-8F49-06E57FF95F88}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MealPlan.Tests", "MealPlan.Tests\MealPlan.Tests.csproj", "{97B0820B-D842-4691-AF3F-B471113D1A56}"
 EndProject
 Global
