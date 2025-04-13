@@ -6,6 +6,13 @@ public class Recipe {
         public string Name { get; set; }
         public List<Ingredient> Ingredients { get; set; }
 
+        public Recipe()
+        {
+            // Initialize lists/strings if necessary, or leave empty if setters handle nulls
+            Name = string.Empty; 
+            Ingredients = new List<Ingredient>(); 
+        }
+
         public Recipe(PantryClass.Pantry pantry) {
             Console.WriteLine("Enter Recipe Name");
             string name = Console.ReadLine();

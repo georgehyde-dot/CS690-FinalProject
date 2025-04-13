@@ -1,6 +1,6 @@
 namespace MealPlan.Tests;
-
-public class UnitTest1
+using MealPlan;
+public class MealPlanTests
 {
     [Fact]
     public void Test1()
