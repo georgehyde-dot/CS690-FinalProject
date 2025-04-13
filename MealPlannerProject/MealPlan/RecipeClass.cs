@@ -1,6 +1,5 @@
-﻿namespace RecipeClass;
-using Ingredient;
-using PantryClass;
+﻿namespace MealPlan;
+
 
 public class Recipe {
         public string Name { get; set; }
@@ -8,12 +7,11 @@ public class Recipe {
 
         public Recipe()
         {
-            // Initialize lists/strings if necessary, or leave empty if setters handle nulls
             Name = string.Empty; 
             Ingredients = new List<Ingredient>(); 
         }
 
-        public Recipe(PantryClass.Pantry pantry) {
+        public Recipe(Pantry pantry) {
             Console.WriteLine("Enter Recipe Name");
             string name = Console.ReadLine();
             this.Name = name;

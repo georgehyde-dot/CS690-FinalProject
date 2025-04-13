@@ -1,17 +1,15 @@
-﻿namespace RecipeListClass;
+﻿namespace MealPlan;
 using Spectre.Console;
-using Ingredient;
-using RecipeClass;
 
 public class RecipeList {
-        public List<RecipeClass.Recipe> Recipes { get; set; }
+        public List<Recipe> Recipes { get; set; }
 
         public RecipeList() {
-            List<RecipeClass.Recipe> recipes = new List<RecipeClass.Recipe>();
+            List<Recipe> recipes = new List<Recipe>();
             this.Recipes = recipes;
         }
 
-        public void AddRecipeToRecipeList(RecipeClass.Recipe recipe) {
+        public void AddRecipeToRecipeList(Recipe recipe) {
             this.Recipes.Add(recipe);
         }
 
@@ -28,7 +26,7 @@ public class RecipeList {
                     .AddChoices(this.Recipes.Select(recipe => recipe.Name ?? "Unnamed Recipe"))
             );
 
-            RecipeClass.Recipe foundRecipe = this.Recipes.FirstOrDefault(recipe => recipe.Name == selectedRecipeName);
+            Recipe foundRecipe = this.Recipes.FirstOrDefault(recipe => recipe.Name == selectedRecipeName);
 
             if (foundRecipe != null)
             {
@@ -92,7 +90,7 @@ public class RecipeList {
             }
         }
 
-        public void UpdateRecipe(PantryClass.Pantry pantry) {
+        public void UpdateRecipe(Pantry pantry) {
             if (this.Recipes.Count == 0) {
                     Console.WriteLine("RecipeList contains no Recipes");
                     return;
@@ -113,7 +111,7 @@ public class RecipeList {
                 );
             }
 
-            RecipeClass.Recipe recipe = new RecipeClass.Recipe(pantry);
+            Recipe recipe = new Recipe(pantry);
 
             this.AddRecipeToRecipeList(recipe);
         }
