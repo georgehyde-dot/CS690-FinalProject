@@ -19,6 +19,7 @@
     <ProjectReference Include="..\RecipeClass\RecipeClass.csproj" />
     <ProjectReference Include="..\RecipeListClass\RecipeListClass.csproj" />
     <ProjectReference Include="..\ShoppingListClass\ShoppingListClass.csproj" />
+    <ProjectReference Include="..\MealPlan.Tests\MealPlan.Tests.csproj" />
   </ItemGroup>
 
 </Project>

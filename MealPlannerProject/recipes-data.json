@@ -1,21 +1,26 @@
 [
   {
-    "Name": "r1",
+    "Name": "Chicken Parmesean",
     "Ingredients": [
       {
-        "name": "a",
+        "name": "Chicken",
+        "amount": 8,
+        "measurementType": "ounces"
+      },
+      {
+        "name": "Breading",
+        "amount": 50,
+        "measurementType": "grams"
+      },
+      {
+        "name": "Marinara Sauce",
         "amount": 1,
-        "measurementType": "a"
+        "measurementType": "cups"
       },
       {
-        "name": "b",
-        "amount": 2,
-        "measurementType": "b"
-      },
-      {
-        "name": "c",
-        "amount": 3,
-        "measurementType": "c"
+        "name": "Parmesean Cheese",
+        "amount": 1,
+        "measurementType": "cups"
       }
     ]
   }
