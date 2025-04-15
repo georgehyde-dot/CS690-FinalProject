@@ -16,8 +16,34 @@ public class Pantry {
                 return;
             }
             foreach (Ingredient ingredient in Ingredients) {
-                AnsiConsole.WriteLine(ingredient.name + " " + ingredient.amount + " " + ingredient.measurementType);
+                AnsiConsole.WriteLine(ingredient.name + " " + ingredient.amount + " " + ingredient.measurementType + " " + ingredient.foodCategory);
             }
+        }
+
+        public void ShowIngredientsByCategory()
+        {
+            if (this.Ingredients == null || !this.Ingredients.Any())
+            {
+                AnsiConsole.MarkupLine("[yellow]Pantry contains no ingredients[/]");
+                return;
+            }
+
+            AnsiConsole.MarkupLine("[underline bold blue]Pantry Contents:[/]"); 
+
+            var groupedIngredients = this.Ingredients
+                .GroupBy(ingredient => string.IsNullOrWhiteSpace(ingredient.foodCategory) ? "Uncategorized" : ingredient.foodCategory)
+                .OrderBy(group => group.Key); 
+
+            foreach (var categoryGroup in groupedIngredients)
+            {
+                AnsiConsole.MarkupLine($"\n[bold green]{categoryGroup.Key}:[/]"); 
+
+                foreach (Ingredient ingredient in categoryGroup.OrderBy(ing => ing.name))
+                {
+                    AnsiConsole.MarkupLine($"  -- [white]{ingredient.name}[/] ({ingredient.amount} {ingredient.measurementType})");
+                }
+            }
+            Console.WriteLine(); 
         }
 
         public Ingredient AddIngredientToPantry() {

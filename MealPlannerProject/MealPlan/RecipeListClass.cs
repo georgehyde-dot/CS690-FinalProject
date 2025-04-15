@@ -38,6 +38,7 @@ public class RecipeList {
                     {
                         AnsiConsole.WriteLine($"- {ingredient.name}");
                     }
+                    AnsiConsole.WriteLine($"NOTES- {foundRecipe.Notes}");
                 }
                 else
                 {
