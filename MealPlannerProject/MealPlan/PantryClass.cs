@@ -26,6 +26,25 @@ public class Pantry {
             return ingredient; 
         }
 
+        public int AddIngredientsToPantryFromShoppingList(List<Ingredient> ingredientsToAdd)
+        {
+            int countAdded = 0;
+            if (ingredientsToAdd == null || ingredientsToAdd.Count == 0)
+            {
+                return 0; 
+            }
+
+            this.Ingredients ??= new List<Ingredient>(); 
+
+            foreach (Ingredient ingredient in ingredientsToAdd)
+            {
+                this.Ingredients.Add(ingredient);
+                countAdded++;
+            }
+
+            return countAdded;
+        }
+
         public void RemoveIngredientsFromPantry() {
             if (this.Ingredients.Count == 0) {
                 Console.WriteLine("Pantry contains no ingredients");

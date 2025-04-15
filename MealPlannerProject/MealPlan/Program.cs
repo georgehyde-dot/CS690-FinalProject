@@ -57,7 +57,7 @@ class Program
                             .MoreChoicesText("[grey](Move up and down to see modes)[/]")
                             .AddChoices(new[] {
                                 "Add-Ingredient", "Add-Recipe", "Show-List", 
-                                "Remove-Ingredient", "Save-List", "Main-Menu",
+                                "Remove-Ingredient", "Save-List", "Move-Items-To-Pantry","Main-Menu",
 
                     }));
                     switch (action)
@@ -76,6 +76,9 @@ class Program
                             break;
                         case "Save-List":
                             shoppingListFileSaver.SaveCollection(shoppingList.Ingredients);
+                            break;
+                        case "Move-Items-To-Pantry":
+                            shoppingList.MoveIngredientsFromShoppingListToPantry(pantry);
                             break;
                         case "Main-Menu":
                             mode = "Main-Menu";
