@@ -1,12 +1,14 @@
 [
   {
-    "name": "a",
-    "amount": 1,
-    "measurementType": "a"
+    "name": "Tomato",
+    "amount": 12,
+    "measurementType": "count",
+    "foodCategory": "vegetable"
   },
   {
-    "name": "b",
-    "amount": 2,
-    "measurementType": "b"
+    "name": "steak",
+    "amount": 3,
+    "measurementType": "ounces",
+    "foodCategory": "protein"
   }
 ]

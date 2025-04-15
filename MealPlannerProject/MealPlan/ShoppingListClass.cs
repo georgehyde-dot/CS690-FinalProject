@@ -98,4 +98,62 @@ public class ShoppingList {
                 }
             }
         }
+
+public void MoveIngredientsFromShoppingListToPantry(Pantry pantry)
+{
+    if (this.Ingredients == null || this.Ingredients.Count == 0)
+    {
+        Console.WriteLine("ShoppingList contains no ingredients");
+        return;
+    }
+
+    var selectedIngredientNames = AnsiConsole.Prompt(
+        new MultiSelectionPrompt<string>()
+            .Title("Select [green]ingredients to move[/]?")
+            .NotRequired()
+            .PageSize(10)
+            .MoreChoicesText("[grey](Move up and down to reveal more ingredients)[/]")
+            .InstructionsText(
+                "[grey](Press [blue]<space>[/] to toggle an ingredient, " +
+                "[green]<enter>[/] to accept)[/]")
+            .AddChoices(this.Ingredients.Select(ingredient => ingredient.name)));
+
+    if (selectedIngredientNames != null && selectedIngredientNames.Count > 0)
+    {
+        var namesToMoveSet = new HashSet<string>(selectedIngredientNames);
+
+        List<Ingredient> ingredientsToMove = this.Ingredients
+            .Where(ingredient => namesToMoveSet.Contains(ingredient.name)) 
+            .ToList();
+
+        if (ingredientsToMove.Count > 0)
+        {
+            int moveCount = pantry.AddIngredientsToPantryFromShoppingList(ingredientsToMove);
+
+            if (moveCount > 0)
+            {
+                Console.WriteLine($"Successfully added {moveCount} ingredient(s) to Pantry.");
+
+                int removedCount = this.Ingredients.RemoveAll(ingredient => namesToMoveSet.Contains(ingredient.name));
+                Console.WriteLine($"Removed {removedCount} ingredient(s) from Shopping List.");
+                 if(moveCount != removedCount) {
+                     AnsiConsole.MarkupLine($"[yellow]Warning:[/]");
+                     Console.WriteLine($" Mismatch between count added to pantry ({moveCount}) and count removed from shopping list ({removedCount}).");
+                 }
+            }
+            else
+            {
+                Console.WriteLine("Selected ingredient(s) were not added to the pantry (perhaps duplicates?).");
+            }
+        }
+        else
+        {
+             Console.WriteLine("Could not find ingredient objects matching the selected names in the shopping list.");
+        }
+    }
+    else
+    {
+        Console.WriteLine("No ingredients selected to move.");
+    }
+}
     }

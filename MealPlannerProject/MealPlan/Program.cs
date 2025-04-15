@@ -57,7 +57,7 @@ class Program
                             .MoreChoicesText("[grey](Move up and down to see modes)[/]")
                             .AddChoices(new[] {
                                 "Add-Ingredient", "Add-Recipe", "Show-List", 
-                                "Remove-Ingredient", "Save-List", "Main-Menu",
+                                "Remove-Ingredient", "Save-List", "Move-Items-To-Pantry","Main-Menu",
 
                     }));
                     switch (action)
@@ -77,6 +77,9 @@ class Program
                         case "Save-List":
                             shoppingListFileSaver.SaveCollection(shoppingList.Ingredients);
                             break;
+                        case "Move-Items-To-Pantry":
+                            shoppingList.MoveIngredientsFromShoppingListToPantry(pantry);
+                            break;
                         case "Main-Menu":
                             mode = "Main-Menu";
                             break;
@@ -92,7 +95,7 @@ class Program
                         .MoreChoicesText("[grey](Move up and down to see modes)[/]")
                         .AddChoices(new[] {
                             "Add-Ingredient", "Show-Ingredients", 
-                            "Remove-Ingredient", "Save-Pantry", "Main-Menu",
+                            "Remove-Ingredient", "Save-Pantry", "Show-Ingredients-by-Category","Main-Menu",
 
                     }));
                     switch (action)
@@ -105,6 +108,9 @@ class Program
                             break;
                         case "Remove-Ingredient":
                             pantry.RemoveIngredientsFromPantry();
+                            break;
+                        case "Show-Ingredients-by-Category":
+                            pantry.ShowIngredientsByCategory();
                             break;
                         case "Save-Pantry":
                             pantryFileSaver.SaveCollection(pantry.Ingredients);

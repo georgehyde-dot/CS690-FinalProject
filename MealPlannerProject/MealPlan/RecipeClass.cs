@@ -5,16 +5,23 @@ public class Recipe {
         public string Name { get; set; }
         public List<Ingredient> Ingredients { get; set; }
 
+        public string Notes { get; set; }
+
         public Recipe()
         {
             Name = string.Empty; 
             Ingredients = new List<Ingredient>(); 
+            Notes = string.Empty;
         }
 
         public Recipe(Pantry pantry) {
             Console.WriteLine("Enter Recipe Name");
             string name = Console.ReadLine();
             this.Name = name;
+
+            Console.WriteLine("Add Notes for Recipe");
+            string notes = Console.ReadLine();
+            this.Notes = notes;
 
             List<Ingredient> listIngredients = new List<Ingredient>();
             

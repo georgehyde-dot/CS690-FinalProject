@@ -4,10 +4,13 @@
         public int amount { get; set; }
         public string measurementType { get; set; }
 
+        public string foodCategory { get; set; }
+
         public Ingredient() {
             name = string.Empty;
             measurementType = string.Empty;
             amount = 0;
+            foodCategory = string.Empty;
         }
 
         public static Ingredient CreateInteractiveIngredient()
@@ -17,6 +20,9 @@
 
             Console.WriteLine("Enter Unit of Measure");
             string measurementType = Console.ReadLine();
+
+            Console.WriteLine("Enter Food Category");
+            string foodCategory = Console.ReadLine(); 
 
             int finalNumAmount;
             while (true)
@@ -36,7 +42,8 @@
             Ingredient newIngredient = new Ingredient {
                 name = name,
                 measurementType = measurementType,
-                amount = finalNumAmount
+                amount = finalNumAmount,
+                foodCategory = foodCategory
             };
             return newIngredient;
         }
