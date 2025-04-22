@@ -156,4 +156,14 @@ public void MoveIngredientsFromShoppingListToPantry(Pantry pantry)
         Console.WriteLine("No ingredients selected to move.");
     }
 }
+    public void SaveShoppingListCollection(ShoppingList shoppingList) {
+        var shoppingListFileSaver = new FileSaver(FileSaver.shoppingListFile);
+        shoppingListFileSaver.SaveCollection(shoppingList.Ingredients);
     }
+
+    public List<Ingredient> LoadShoppingListCollection() {
+        var shoppingListFileSaver = new FileSaver(FileSaver.shoppingListFile);
+        return shoppingListFileSaver.LoadCollection<Ingredient>();
+    }
+
+}

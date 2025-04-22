@@ -8,29 +8,19 @@ class Program
 {
     static void Main(string[] args)
     {
-        // Manage Data at start up
-        const string pantryFile = "pantry-data.json";
-        const string recipesFile = "recipes-data.json";
-        const string shoppingListFile = "shopping-list-data.json";
+        RunMealPlanner();
+    }    
 
-        var pantryFileSaver = new FileSaver(pantryFile);
-        var recipeListFileSaver = new FileSaver(recipesFile);
-        var shoppingListFileSaver = new FileSaver(shoppingListFile);
+    static void RunMealPlanner() {
+           
 
-        var pantry = new Pantry();
-        var recipeList = new RecipeList();
-        var shoppingList = new ShoppingList();
+       Tuple<Pantry, RecipeList, ShoppingList> stores = InitializeDataStores();
 
-        Console.WriteLine("Loading data from files...");
-        // LoadCollection returns a List<T>, assign it to the corresponding property
-        pantry.Ingredients = pantryFileSaver.LoadCollection<Ingredient>();
-        recipeList.Recipes = recipeListFileSaver.LoadCollection<Recipe>();
-        shoppingList.Ingredients = shoppingListFileSaver.LoadCollection<Ingredient>();
+       Pantry pantry = stores.Item1;
+       RecipeList recipeList = stores.Item2;
+       ShoppingList shoppingList = stores.Item3;
 
-        Console.WriteLine($" -> Loaded {pantry.Ingredients.Count} pantry items.");
-        Console.WriteLine($" -> Loaded {recipeList.Recipes.Count} recipes.");
-        Console.WriteLine($" -> Loaded {shoppingList.Ingredients.Count} shopping list items.");
-        Console.WriteLine("------------------------------------");
+        
 
         string mode = "Main-Menu";
 
@@ -75,7 +65,8 @@ class Program
                             shoppingList.RemoveIngredientsFromShoppingList();
                             break;
                         case "Save-List":
-                            shoppingListFileSaver.SaveCollection(shoppingList.Ingredients);
+                            shoppingList.SaveShoppingListCollection(shoppingList);
+                            
                             break;
                         case "Move-Items-To-Pantry":
                             shoppingList.MoveIngredientsFromShoppingListToPantry(pantry);
@@ -113,7 +104,7 @@ class Program
                             pantry.ShowIngredientsByCategory();
                             break;
                         case "Save-Pantry":
-                            pantryFileSaver.SaveCollection(pantry.Ingredients);
+                            pantry.SavePantryCollection(pantry);
                             break;
                         case "Main-Menu":
                             mode = "Main-Menu";
@@ -150,7 +141,7 @@ class Program
                             recipeList.UpdateRecipe(pantry);
                             break;
                         case "Save-Recipes":
-                            recipeListFileSaver.SaveCollection(recipeList.Recipes);
+                            recipeList.SaveRecipeListCollection(recipeList);
                             break;
                         case "Main-Menu":
                             mode = "Main-Menu";
@@ -160,5 +151,30 @@ class Program
             }
         }
         Console.WriteLine("Thanks for visiting!");
-    }    
+ 
+    }
+
+    public static  Tuple<Pantry, RecipeList, ShoppingList> InitializeDataStores() {
+         // Manage Data at start up
+        
+        
+        
+
+        var pantry = new Pantry();
+        var recipeList = new RecipeList();
+        var shoppingList = new ShoppingList();
+
+        Console.WriteLine("Loading data from files...");
+        // LoadCollection returns a List<T>, assign it to the corresponding property
+        pantry.Ingredients = pantry.LoadPantryCollection();
+        recipeList.Recipes = recipeList.LoadRecipeListCollection();
+        shoppingList.Ingredients = shoppingList.LoadShoppingListCollection();
+
+        Console.WriteLine($" -> Loaded {pantry.Ingredients.Count} pantry items.");
+        Console.WriteLine($" -> Loaded {recipeList.Recipes.Count} recipes.");
+        Console.WriteLine($" -> Loaded {shoppingList.Ingredients.Count} shopping list items.");
+        Console.WriteLine("------------------------------------");
+
+        return Tuple.Create<Pantry, RecipeList, ShoppingList>(pantry, recipeList, shoppingList);
+    }
 }

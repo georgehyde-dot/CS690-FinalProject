@@ -117,4 +117,13 @@ public class RecipeList {
             this.AddRecipeToRecipeList(recipe);
         }
 
+        public void SaveRecipeListCollection(RecipeList recipeList) {
+            var recipeListFileSaver = new FileSaver(FileSaver.recipesFile);
+            recipeListFileSaver.SaveCollection(recipeList.Recipes);
+        }
+
+        public List<Recipe> LoadRecipeListCollection() {
+           var recipeListFileSaver = new FileSaver(FileSaver.recipesFile);
+           return recipeListFileSaver.LoadCollection<Recipe>(); 
+        }
     }
