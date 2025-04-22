@@ -7,6 +7,10 @@ public class FileSaver
     {
         private readonly string _filename;
 
+        public const string pantryFile = "pantry-data.json";
+        public const string recipesFile = "recipes-data.json";
+        public const string shoppingListFile = "shopping-list-data.json";
+
         private static readonly JsonSerializerOptions _options = new JsonSerializerOptions
         {
             WriteIndented = true,

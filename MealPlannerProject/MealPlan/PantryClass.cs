@@ -141,5 +141,15 @@ public class Pantry {
                 .ToList();
             return resultList;
         }
+
+        public void SavePantryCollection(Pantry pantry) {
+            var pantryFileSaver = new FileSaver(FileSaver.pantryFile);
+            pantryFileSaver.SaveCollection(pantry.Ingredients);
+        }
+
+        public List<Ingredient> LoadPantryCollection() {
+            var pantryFileSaver = new FileSaver(FileSaver.pantryFile); 
+            return pantryFileSaver.LoadCollection<Ingredient>();
+        }
     }
 
