@@ -1,0 +1,92 @@
+[
+  {
+    "Name": "Chicken Parmesean",
+    "Ingredients": [
+      {
+        "name": "Tomato",
+        "amount": 12,
+        "measurementType": "count",
+        "foodCategory": "vegetable"
+      },
+      {
+        "name": "Chicken",
+        "amount": 8,
+        "measurementType": "ounces",
+        "foodCategory": "protein"
+      },
+      {
+        "name": "Parmesean Cheese",
+        "amount": 12,
+        "measurementType": "grams",
+        "foodCategory": "dairy"
+      },
+      {
+        "name": "Breading",
+        "amount": 1,
+        "measurementType": "cups",
+        "foodCategory": "carb"
+      }
+    ],
+    "Notes": "This one is great!"
+  },
+  {
+    "Name": "Chicken Parmesean",
+    "Ingredients": [
+      {
+        "name": "Tomato",
+        "amount": 12,
+        "measurementType": "count",
+        "foodCategory": "vegetable"
+      },
+      {
+        "name": "Chicken",
+        "amount": 8,
+        "measurementType": "ounces",
+        "foodCategory": "protein"
+      },
+      {
+        "name": "Parmesean Cheese",
+        "amount": 12,
+        "measurementType": "grams",
+        "foodCategory": "dairy"
+      },
+      {
+        "name": "Breading",
+        "amount": 1,
+        "measurementType": "cups",
+        "foodCategory": "carb"
+      }
+    ],
+    "Notes": "This one is great!"
+  },
+  {
+    "Name": "Chicken Parmesean",
+    "Ingredients": [
+      {
+        "name": "Tomato",
+        "amount": 12,
+        "measurementType": "count",
+        "foodCategory": "vegetable"
+      },
+      {
+        "name": "Chicken",
+        "amount": 8,
+        "measurementType": "ounces",
+        "foodCategory": "protein"
+      },
+      {
+        "name": "Parmesean Cheese",
+        "amount": 12,
+        "measurementType": "grams",
+        "foodCategory": "dairy"
+      },
+      {
+        "name": "Breading",
+        "amount": 1,
+        "measurementType": "cups",
+        "foodCategory": "carb"
+      }
+    ],
+    "Notes": "This one is great!"
+  }
+]
