@@ -10,6 +10,7 @@ public class FileSaver
         public const string pantryFile = "pantry-data.json";
         public const string recipesFile = "recipes-data.json";
         public const string shoppingListFile = "shopping-list-data.json";
+        public const string scheduleFileSaver = "schedule-data.json";
 
         private static readonly JsonSerializerOptions _options = new JsonSerializerOptions
         {

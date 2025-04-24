@@ -14,25 +14,26 @@ class Program
     static void RunMealPlanner() {
            
 
-       Tuple<Pantry, RecipeList, ShoppingList> stores = InitializeDataStores();
+       Tuple<Pantry, RecipeList, ShoppingList, Schedule> stores = InitializeDataStores();
 
        Pantry pantry = stores.Item1;
        RecipeList recipeList = stores.Item2;
        ShoppingList shoppingList = stores.Item3;
+       Schedule schedule = stores.Item4;
 
         
 
         string mode = "Main-Menu";
 
         while (mode != "Quit") {
-            Console.WriteLine("Please Select Mode (shopping-list, pantry, recipes), or (quit) to exit program");
+            Console.WriteLine("Please Select Mode (shopping-list, pantry, recipes, Schedule), or (quit) to exit program");
             mode = AnsiConsole.Prompt(
                 new SelectionPrompt<string>()
                     .Title("Please Select Mode")
                     .PageSize(10)
                     .MoreChoicesText("[grey](Move up and down to see modes)[/]")
                     .AddChoices(new[] {
-                        "Shopping-List", "Pantry", "Recipes", "Quit",
+                        "Shopping-List", "Pantry", "Recipes", "Schedule","Quit",
             }));
     
 
@@ -148,33 +149,63 @@ class Program
                             break;
                     }
                 }
+            } else if (mode == "Schedule") {
+                while (mode != "Main-Menu") {
+                    string action = AnsiConsole.Prompt(
+                    new SelectionPrompt<string>()
+                        .Title("Select action")
+                        .PageSize(10)
+                        .MoreChoicesText("[grey](Move up and down to see modes)[/]")
+                        .AddChoices(new[] {
+                            "Create-Schedule", "Show-Schedule", "Save-Schedule", "Remove-Recipe","Main-Menu",
+
+                    }));
+                    switch (action)
+                    {
+                        case "Create-Schedule":
+                            schedule.AddRecipeToSchedule(recipeList);
+                            break;
+                        case "Show-Schedule":
+                            schedule.ShowRecipesInSchedule();
+                            break;
+                        case "Save-Schedule":
+                            schedule.SaveScheduleCollection(schedule);
+                            break;
+                        case "Remove-Recipe":
+                            schedule.RemoveRecipeFromSchedule();
+                            break;
+                        case "Main-Menu":
+                            mode = "Main-Menu";
+                            break;
+                    }
+                }
             }
+        
         }
         Console.WriteLine("Thanks for visiting!");
  
     }
 
-    public static  Tuple<Pantry, RecipeList, ShoppingList> InitializeDataStores() {
+    public static  Tuple<Pantry, RecipeList, ShoppingList, Schedule> InitializeDataStores() {
          // Manage Data at start up
-        
-        
-        
-
         var pantry = new Pantry();
         var recipeList = new RecipeList();
         var shoppingList = new ShoppingList();
+        var schedule = new Schedule();
 
         Console.WriteLine("Loading data from files...");
         // LoadCollection returns a List<T>, assign it to the corresponding property
         pantry.Ingredients = pantry.LoadPantryCollection();
         recipeList.Recipes = recipeList.LoadRecipeListCollection();
         shoppingList.Ingredients = shoppingList.LoadShoppingListCollection();
+        schedule.Recipes = schedule.LoadScheduleCollection();
 
         Console.WriteLine($" -> Loaded {pantry.Ingredients.Count} pantry items.");
         Console.WriteLine($" -> Loaded {recipeList.Recipes.Count} recipes.");
         Console.WriteLine($" -> Loaded {shoppingList.Ingredients.Count} shopping list items.");
+        Console.WriteLine($" -> Loaded {schedule.Recipes.Count} recipes in schedule.");
         Console.WriteLine("------------------------------------");
 
-        return Tuple.Create<Pantry, RecipeList, ShoppingList>(pantry, recipeList, shoppingList);
+        return Tuple.Create<Pantry, RecipeList, ShoppingList, Schedule>(pantry, recipeList, shoppingList, schedule);
     }
 }
